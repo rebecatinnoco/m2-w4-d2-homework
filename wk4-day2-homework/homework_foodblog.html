@@ -66,17 +66,29 @@
         }
         main .post {
             margin: 25px;
-            padding: 25px;
+            padding: 15px;
+            border: 2px solid rgba(83, 78, 58, 0.6);
+            border-radius: 0.5em;
+        }
+        main .post1 {
+            margin: 25px;
+            padding: 15px;
             border: 2px solid rgba(83, 78, 58, 0.6);
             border-radius: 0.5em;
         }
         main .post2 {
             margin: 25px;
-            padding: 25px;
+            padding: 15px;
             border: 2px solid rgba(83, 78, 58, 0.6);
             border-radius: 0.5em;
         }
         main .post3 {
+            margin: 25px;
+            padding: 25px;
+            border: 2px solid rgba(83, 78, 58, 0.6);
+            border-radius: 0.5em;
+        }
+        main .post4 {
             margin: 25px;
             padding: 25px;
             border: 2px solid rgba(83, 78, 58, 0.6);
@@ -90,56 +102,126 @@
             text-align: center;
             font-size: 0.85em;
         }
-        .mimage img {
-            width: auto; 
-            max-height: 100%; 
-        }
-        .mimage {
-            float: left;
-            height:50px;
-            display: inline-block;
-            padding-right: 20px;
-        }
-        
-        .text{
-            display: inline-block;
-        }
-        main #info-box {
-    position: absolute;
-    background-color: #000;
-    opacity: 70%;
+
+        /* -------------------- CSS TEST -------------------- */
+    .modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: table;
+    transition: opacity 0.3s ease;
+  }
+  .close-bt {
+      margin-bottom: 12em;
+  }
+  #BD {
+      background-color:aquamarine;
+      background-repeat: repeat;
+      height: 100%;
+      width: auto;
+  }
+  
+  .modal-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  .modal-container {
+    width: 250px;
+    height: 400px;
+    margin: 0px auto;
+    padding: 20px 40px;
+    padding-bottom: 30px;
+    background-color: rgba(0, 0,0, 0.9);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    transition: all 0.3s ease;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  .modal-header h3 {
+    margin-top: 0;
     color: white;
-    width: 400px;
-    height: 250px;
-    margin-top: 200px;
-    margin-left: 450px;
-    border-radius: 10%;
-    visibility: hidden;
-}
-main #info-box #close-info {
-    color:#da9617;
-    font-weight: bold;
-    font-family: 'Times New Roman', Times, serif;
-    padding-top: 70px;
-}
-main #info-box #title {
-    font-family: 'Times New Roman', Times, serif;
-    padding-top: 30px;
-    padding-left: 20px;
-    font-weight: bold;
-    font-size: x-large;
-    text-align: left;
-}
-main #info-box #info {
-    font-family: 'Times New Roman', Times, serif;
-    margin-right:100px;
-    padding-top: 20px;
-    padding-left: 20px;
-    text-align: left;
-}
+    font-size: 50px;
+
+  }
+  
+  .modal-body {
+    margin: 20px 0;
+    font-size: large;
+    color: white;
+
+  }
+  
+  .modal-default-button {
+    float: left;
+    margin-top: 100px;
+  }
+
+  
+  .mimage img {
+    width: auto; 
+    max-height: 100%; 
+  }
+
+  .mimage {
+    float: left;
+    height:50px;
+    display: inline-block;
+    padding-right: 20px;
+  }
+  #show-modal {
+      height: auto;
+      width: 90px;
+      text-align: center;
+      
+  }
+  .bodytxt {
+      color: white;
+
+  }
+        
+  /* ------------------------------- CSS END TEST ------------------------------- */
     </style>
 
-    
+    <!-- ------------------- MODAL -------------------------------------------------- -->
+<script type="text/x-template" id="modal-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+
+            <div class="modal-header">
+              <slot name="header">
+                BRIANNA
+              </slot>
+            </div>
+
+            <div class="modal-body">
+              <slot name="body">
+                Foodie Level:  Novice <br><br>
+                Bio:  <br><br>
+                Food enthusiast. Love do cook and experiment. Into only organic, fat free, sugar free stuffs!
+              </slot>
+            </div>
+
+            <div class="modal-footer">
+              <slot name="footer">
+                <button class="modal-default-button close-bt" @click="$emit('close')">
+                  Close
+                </button>
+              </slot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+  </script>
+  <!-- -------------------------------------END OF MODAL -------------------------------------------------- -->
+</head> 
 
 </head>
 <body>
@@ -158,22 +240,59 @@ main #info-box #info {
     
     <section id="blogposts">  
     
-    <div class="post">
-        <div class="mimage">
-            <new_component></new_component>
-    </div>
-        <span class="author">{{obj1}}</span> 
-        <span class="date">{{obj2}}</span>
-        <span class="reply">{{obj3}}</span>
-        <div class="text">
-        <p>{{obj4}}</p>
-        </div>  
-        <div id="info-box">
-            <div id="title"></div>
-            <div id="info"></div>
-            <p id="close-info"></p>
+        <div class="post">
+            <div>
+                <button id="show-modal" @click="showModal = true">
+                <new_component></new_component>
+                </button>
+                <modal v-if="showModal" @close="showModal = false">
+                  <h3 slot="header">Brianna</h3>
+                </modal>
+            </div>
+            <span class="author">Brianna</span> — 
+            <span class="date">February 18, 2021 @ 3:30 pm</span>
+            <span class="reply">REPLY</span>
+            <p>
+            Was amazing! My Walmart didn’t have coriander in stock and didn’t have ground cumin. I used serrano instead of jalapeño. It was just like my favorite tortilla soup from BJs. I am sending this recipe to my family. I want everyone to try it!
+            </p>
         </div>
-    </div>
+
+    <script>
+        // register modal component
+        Vue.component("modal", {
+          template: "#modal-template"
+        });
+    
+        // start app
+        new Vue({
+          el: "#app",
+          data: {
+            showModal: false
+          }
+        });
+        new Vue({
+          el: ".post",
+          data: {
+            showModal: false
+          },
+          components:{
+          'new_component' : {
+                   template : '<img class="mimage" src="images/profile.png">'
+                }
+            }
+        });
+      </script>
+        <div class="post1">
+            <div class="mimage">
+                <new_component></new_component>
+            </div>
+            <span class="author">{{obj13}}</span> 
+            <span class="date">{{obj14}}</span>
+            <span class="reply">{{obj15}}</span>
+            <div class="text">
+            <p>{{obj16}}</p>
+            </div>  
+        </div>
     <div class="post2">
         <div class="mimage">
             <new_component></new_component>
@@ -197,54 +316,50 @@ main #info-box #info {
         </div>  
     </div>
 
-    <script>      
-        var app = new Vue({
-            el: '.post',
-            data: {
-                obj1: 'Brianna',
-                obj2: 'February 18, 2021 @ 3:30 pm',
-                obj3: 'REPLY',
-                obj4: ' Was amazing! My Walmart didn’t have coriander in stock and didn’t have ground cumin. I used serrano instead of jalapeño. It was just like my favorite tortilla soup from BJs. I am sending this recipe to my family. I want everyone to try it',
-                obj5: 'CATHERINE LEONARDO',
-                obj6: 'February 13, 2021 @ 12:58 pm',
-                obj7: 'REPLY',
-                obj8: ' LOVE this White Chicken Chili! You are right, it is satiating meal—delicious with toasted bread. Refreshingly different taste than any chicken chili I’ve made in the past. I made it exactly as written and added some chopped zucchini, carrots, and celery. Instead of shredding the chicken, I chopped it into small pieces. It freezes very well. Will be an all-time favorite, for sure.'
-            },
-            components:{
-            'new_component' : {
-               template : '<img src="images/profile.png">'
-            }
-         },
-        });
-        var app = new Vue({
-            el: '.post2',
-            data: {
-                obj5: 'CATHERINE LEONARDO',
-                obj6: 'February 13, 2021 @ 12:58 pm',
-                obj7: 'REPLY',
-                obj8: ' LOVE this White Chicken Chili! You are right, it is satiating meal—delicious with toasted bread. Refreshingly different taste than any chicken chili I’ve made in the past. I made it exactly as written and added some chopped zucchini, carrots, and celery. Instead of shredding the chicken, I chopped it into small pieces. It freezes very well. Will be an all-time favorite, for sure.'
-            },
-            components:{
-            'new_component' : {
-               template : '<img src="images/profile.png">'
-            }
-         }
-        });
-        var app = new Vue({
-            el: '.post3',
-            data: {
-                obj9: 'KALI',
-                obj10: 'February 13, 2021 @ 11:31 am',
-                obj11: 'REPLY',
-                obj12: ' This recipe is dynamite! My partner usually won’t eat beans but he finished the whole pot (darn was hoping to have some for leftovers haha). This is crowd-pleaser that I am going to add to my regular recipe rotation. Thanks so much, Lisa!'
-            },
-            components:{
-            'new_component' : {
-               template : '<img src="images/profile.png">'
-            }
-         }
-        });
-    </script> 
+        <script>
+            var app = new Vue({
+                el: '.post2',
+                data: {
+                    obj5: 'CATHERINE LEONARDO',
+                    obj6: 'February 13, 2021 @ 12:58 pm',
+                    obj7: 'REPLY',
+                    obj8: ' LOVE this White Chicken Chili! You are right, it is satiating meal—delicious with toasted bread. Refreshingly different taste than any chicken chili I’ve made in the past. I made it exactly as written and added some chopped zucchini, carrots, and celery. Instead of shredding the chicken, I chopped it into small pieces. It freezes very well. Will be an all-time favorite, for sure.'
+                },
+                components:{
+                'new_component' : {
+                   template : '<img src="images/profile.png">'
+                }
+             }
+            });
+            var app = new Vue({
+                el: '.post3',
+                data: {
+                    obj9: 'KALI',
+                    obj10: 'February 13, 2021 @ 11:31 am',
+                    obj11: 'REPLY',
+                    obj12: ' This recipe is dynamite! My partner usually won’t eat beans but he finished the whole pot (darn was hoping to have some for leftovers haha). This is crowd-pleaser that I am going to add to my regular recipe rotation. Thanks so much, Lisa!'
+                },
+                components:{
+                'new_component' : {
+                   template : '<img src="images/profile.png">'
+                }
+             }
+            });
+            var app = new Vue({
+                el: '.post1',
+                data: {
+                    obj13: 'LINH',
+                    obj14: 'February 15, 2021 @ 9:46 am',
+                    obj15: 'REPLY',
+                    obj16: ' I just made this soup today and it’s so tasty! didn’t have corn at home but still turned out very good.  It’s a winner!  I made beef chili for my parents; but since my dad has gout he can’t eat beef; this white chicken chili is perfect for him.  Thank you Lisa!'
+                },
+                components:{
+                'new_component' : {
+                   template : '<img src="images/profile.png">'
+                }
+             }
+            });
+        </script>
 
     </section>
     </main>
